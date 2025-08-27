@@ -1,1 +1,1 @@
-from cache import SimpleCache
+from .cache import SimpleCache

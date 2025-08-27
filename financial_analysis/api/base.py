@@ -1,4 +1,5 @@
 import abc
+import logging
 
 class APIBase(abc.ABC):
     """
@@ -7,17 +8,15 @@ class APIBase(abc.ABC):
 
     def __init__(self):
         self.session = None
+        self.logger = logging.getLogger(self.__class__.__name__)
 
     @abc.abstractmethod
     def get_historical_data(self, symbol: str, start: str = None, end: str = None):
-        """
-        Fetch historical price data for a given symbol.
-        """
         pass
 
-    def handle_error(self, response):
+    def handle_error(self, error):
         """
-        Handle errors in API responses.
+        Handle errors in API responses and log them.
         """
-        if hasattr(response, "status_code") and response.status_code != 200:
-            raise Exception(f"API Error: {getattr(response, 'status_code', 'Unknown')} - {getattr(response, 'text', 'No message')}")
+        self.logger.error(f"API Error: {error}")
+        raise Exception(f"API Error: {error}")
